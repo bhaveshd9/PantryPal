@@ -26,7 +26,7 @@ export function ItemForm({ item, onSubmit, trigger, open, onOpenChange }: ItemFo
     unit: 'pieces',
     category: defaultCategories[0].name,
     expirationDate: new Date().toISOString().split('T')[0],
-    notes: '',
+    notes: '', // Initialize with an empty string
   });
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export function ItemForm({ item, onSubmit, trigger, open, onOpenChange }: ItemFo
         unit: item.unit,
         category: item.category,
         expirationDate: item.expirationDate,
-        notes: item.notes || '',
+        notes: item.notes ?? '', // Use nullish coalescing to handle undefined
       });
     }
   }, [item]);
@@ -130,6 +130,14 @@ export function ItemForm({ item, onSubmit, trigger, open, onOpenChange }: ItemFo
               value={formData.expirationDate}
               onChange={(e) => setFormData({ ...formData, expirationDate: e.target.value })}
               required
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="notes">Notes</Label>
+            <Input
+              id="notes"
+              value={formData.notes}
+              onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
             />
           </div>
           <Button type="submit" className="w-full">
