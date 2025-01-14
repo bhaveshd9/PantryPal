@@ -37,7 +37,7 @@ export function ItemForm({ item, onSubmit, trigger, open, onOpenChange }: ItemFo
         unit: item.unit,
         category: item.category,
         expirationDate: item.expirationDate,
-        notes: item.notes ?? '', // Use nullish coalescing to handle undefined
+        notes: item.notes ?? '', // Handle undefined notes
       });
     }
   }, [item]);
@@ -90,7 +90,7 @@ export function ItemForm({ item, onSubmit, trigger, open, onOpenChange }: ItemFo
                 type="number"
                 min="1"
                 value={formData.quantity}
-                onChange={(e) => setFormData({ ...formData, quantity: parseInt(e.target.value) })}
+                onChange={(e) => setFormData({ ...formData, quantity: parseInt(e.target.value, 10) })}
                 required
               />
             </div>
