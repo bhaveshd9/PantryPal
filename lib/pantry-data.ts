@@ -115,7 +115,7 @@ export const sampleRecipes: Recipe[] = [
     prepTime: 5,
     cookTime: 15,
     dietaryRestrictions: ['Vegetarian'],
-    dietaryType: 'Vegetarian', // Added this property
+    dietaryType: 'vegetarian', // Added this property
   },
 ];
 
