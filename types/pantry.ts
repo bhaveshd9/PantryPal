@@ -16,6 +16,7 @@ export interface PantryItem {
   location: string;
   nutritionInfo?: NutritionInfo;
   price?: number;
+  notes?: string;
 }
 
 export interface RecipeIngredient {
