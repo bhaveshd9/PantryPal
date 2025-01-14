@@ -55,4 +55,10 @@ export interface PantryStats {
   categories: number;
 }
 
+export interface PantryCategory {
+  id: string;
+  name: string;
+  color: string;
+}
+
 export type DietaryType = 'vegetarian' | 'vegan' | 'non-vegetarian';
