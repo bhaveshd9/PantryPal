@@ -13,7 +13,7 @@ export interface PantryItem {
   unit: string;
   category: string;
   expirationDate: string;
-  location: string;
+  location?: string;
   nutritionInfo?: NutritionInfo;
   price?: number;
   notes?: string;
