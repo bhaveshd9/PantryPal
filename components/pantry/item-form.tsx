@@ -52,7 +52,7 @@ export function ItemForm({ item, onSubmit, trigger, open, onOpenChange }: ItemFo
       unit: 'pieces',
       category: defaultCategories[0].name,
       expirationDate: new Date().toISOString().split('T')[0],
-      notes: '',
+      notes: '', // Reset notes
     });
   };
 
