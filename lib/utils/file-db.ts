@@ -10,7 +10,7 @@ export const initialPantryItems: PantryItem[] = [
     quantity: 2,
     unit: 'kg',
     category: 'Dry Goods',
-    expirationDate: '2024-12-31',
+    expirationDate: '2025-12-31',
     location: 'Pantry',
     nutritionInfo: {
       calories: 350,
@@ -26,7 +26,7 @@ export const initialPantryItems: PantryItem[] = [
     quantity: 3,
     unit: 'jars',
     category: 'Canned Goods',
-    expirationDate: '2024-06-30',
+    expirationDate: '2025-06-30',
     location: 'Pantry',
     nutritionInfo: {
       calories: 80,
@@ -42,7 +42,7 @@ export const initialPantryItems: PantryItem[] = [
     quantity: 1,
     unit: 'gallon',
     category: 'Dairy',
-    expirationDate: '2024-04-15',
+    expirationDate: '2025-04-15',
     location: 'Refrigerator',
     nutritionInfo: {
       calories: 120,
