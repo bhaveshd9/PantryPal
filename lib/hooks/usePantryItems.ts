@@ -1,30 +1,41 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { PantryItem } from '@/types/pantry';
 import { toast } from 'sonner';
+import { loadPantryItems, updateDatabase } from '@/lib/utils/file-db';
 
 export function usePantryItems() {
   const [items, setItems] = useState<PantryItem[]>([]);
+
+  useEffect(() => {
+    setItems(loadPantryItems());
+  }, []);
 
   const addItem = (newItem: Omit<PantryItem, 'id'>) => {
     const item: PantryItem = {
       ...newItem,
       id: Math.random().toString(36).substr(2, 9),
     };
-    setItems(prev => [...prev, item]);
+    const updatedItems = [...items, item];
+    setItems(updatedItems);
+    updateDatabase('pantryItems', updatedItems);
     toast.success('Item added successfully');
   };
 
   const editItem = (editedItem: PantryItem) => {
-    setItems(prev => prev.map(item => 
+    const updatedItems = items.map(item => 
       item.id === editedItem.id ? editedItem : item
-    ));
+    );
+    setItems(updatedItems);
+    updateDatabase('pantryItems', updatedItems);
     toast.success('Item updated successfully');
   };
 
   const deleteItem = (id: string) => {
-    setItems(prev => prev.filter(item => item.id !== id));
+    const updatedItems = items.filter(item => item.id !== id);
+    setItems(updatedItems);
+    updateDatabase('pantryItems', updatedItems);
     toast.success('Item deleted successfully');
   };
 

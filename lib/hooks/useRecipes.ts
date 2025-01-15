@@ -1,30 +1,41 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Recipe } from '@/types/pantry';
 import { toast } from 'sonner';
+import { loadRecipes, updateDatabase } from '@/lib/utils/file-db';
 
 export function useRecipes() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
+
+  useEffect(() => {
+    setRecipes(loadRecipes());
+  }, []);
 
   const addRecipe = (newRecipe: Omit<Recipe, 'id'>) => {
     const recipe: Recipe = {
       ...newRecipe,
       id: Math.random().toString(36).substr(2, 9),
     };
-    setRecipes(prev => [...prev, recipe]);
+    const updatedRecipes = [...recipes, recipe];
+    setRecipes(updatedRecipes);
+    updateDatabase('recipes', updatedRecipes);
     toast.success('Recipe added successfully');
   };
 
   const editRecipe = (editedRecipe: Recipe) => {
-    setRecipes(prev => prev.map(recipe =>
+    const updatedRecipes = recipes.map(recipe =>
       recipe.id === editedRecipe.id ? editedRecipe : recipe
-    ));
+    );
+    setRecipes(updatedRecipes);
+    updateDatabase('recipes', updatedRecipes);
     toast.success('Recipe updated successfully');
   };
 
   const deleteRecipe = (id: string) => {
-    setRecipes(prev => prev.filter(recipe => recipe.id !== id));
+    const updatedRecipes = recipes.filter(recipe => recipe.id !== id);
+    setRecipes(updatedRecipes);
+    updateDatabase('recipes', updatedRecipes);
     toast.success('Recipe deleted successfully');
   };
 
