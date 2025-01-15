@@ -7,3 +7,9 @@ Shopping List: Create and organize shopping lists to ensure you never forget ess
 Recipe Management: Add and save your favorite recipes, linking them with your pantry items for seamless meal preparation.
 Smart Search: Quickly search for items in your pantry, making it easy to plan meals with what you already have.
 PantryPal brings convenience and organization to your kitchen, helping you save time, reduce food waste, and enjoy stress-free cooking.
+
+Technologies Used
+Frontend: Next.js, React, TypeScript, Tailwind CSS, Lucide-react
+Backend: Node.js, API routes
+Testing: Jest
+Deployment: Netlify
