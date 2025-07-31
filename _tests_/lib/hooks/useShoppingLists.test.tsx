@@ -1,16 +1,38 @@
 import { renderHook, act } from '@testing-library/react';
 import { useShoppingList } from '@/lib/hooks/useShoppingList';
-import { loadShoppingList, updateDatabase } from '@/lib/utils/file-db';
+import { ShoppingListService } from '@/lib/services/database';
 
-jest.mock('@/lib/utils/file-db', () => ({
-  loadShoppingList: jest.fn(),
-  updateDatabase: jest.fn(),
+// Mock the database service
+jest.mock('@/lib/services/database', () => ({
+  ShoppingListService: {
+    getAllItems: jest.fn(),
+    createItem: jest.fn(),
+    toggleItem: jest.fn(),
+    deleteItem: jest.fn(),
+  },
 }));
 
+// Mock the sonner toast
 jest.mock('sonner', () => ({
   toast: {
     success: jest.fn(),
+    error: jest.fn(),
   },
+}));
+
+// Mock the pantry store
+jest.mock('@/lib/stores/pantry-store', () => ({
+  usePantryStore: () => ({
+    shoppingList: [],
+    shoppingLoading: false,
+    shoppingError: null,
+    setShoppingList: jest.fn(),
+    addShoppingItem: jest.fn(),
+    updateShoppingItem: jest.fn(),
+    deleteShoppingItem: jest.fn(),
+    setShoppingLoading: jest.fn(),
+    setShoppingError: jest.fn(),
+  }),
 }));
 
 describe('useShoppingList', () => {
@@ -21,80 +43,69 @@ describe('useShoppingList', () => {
       quantity: 1,
       unit: 'piece',
       category: 'Test Category',
+      price: 2.99,
       isChecked: false,
     },
   ];
 
   beforeEach(() => {
+    // Reset all mocks before each test
     jest.clearAllMocks();
-    (loadShoppingList as jest.Mock).mockReturnValue(mockItems);
+    (ShoppingListService.getAllItems as jest.Mock).mockResolvedValue(mockItems);
   });
 
-  it('should load initial shopping list', () => {
+  it('should load initial shopping list items', async () => {
     const { result } = renderHook(() => useShoppingList());
-    expect(result.current.shoppingList).toEqual(mockItems);
-    expect(loadShoppingList).toHaveBeenCalled();
+    
+    // Wait for the async effect to complete
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 0));
+    });
+    
+    expect(ShoppingListService.getAllItems).toHaveBeenCalled();
   });
 
-  it('should add a new item', () => {
+  it('should add a new shopping list item', async () => {
     const { result } = renderHook(() => useShoppingList());
-
     const newItem = {
       name: 'New Item',
       quantity: 1,
       unit: 'piece',
       category: 'Test Category',
+      price: 3.99,
     };
 
-    act(() => {
-      result.current.addItem(newItem);
+    (ShoppingListService.createItem as jest.Mock).mockResolvedValue({ ...newItem, id: '2', isChecked: false });
+
+    await act(async () => {
+      await result.current.addItem(newItem);
     });
 
-    expect(result.current.shoppingList).toHaveLength(2);
-    expect(result.current.shoppingList[1]).toMatchObject({
-      ...newItem,
-      isChecked: false,
-    });
-    expect(updateDatabase).toHaveBeenCalled();
+    expect(ShoppingListService.createItem).toHaveBeenCalledWith(newItem);
   });
 
-  it('should update quantity of existing item', () => {
+  it('should toggle a shopping list item', async () => {
     const { result } = renderHook(() => useShoppingList());
+    const toggledItem = { ...mockItems[0], isChecked: true };
 
-    const existingItem = {
-      name: 'Test Item',
-      quantity: 2,
-      unit: 'piece',
-      category: 'Test Category',
-    };
+    (ShoppingListService.toggleItem as jest.Mock).mockResolvedValue(toggledItem);
 
-    act(() => {
-      result.current.addItem(existingItem);
+    await act(async () => {
+      await result.current.toggleItem('1');
     });
 
-    expect(result.current.shoppingList[0].quantity).toBe(3);
-    expect(updateDatabase).toHaveBeenCalled();
+    expect(ShoppingListService.toggleItem).toHaveBeenCalledWith('1');
   });
 
-  it('should toggle item checked status', () => {
+  it('should remove a shopping list item', async () => {
     const { result } = renderHook(() => useShoppingList());
 
-    act(() => {
-      result.current.toggleItem('1');
+    (ShoppingListService.deleteItem as jest.Mock).mockResolvedValue(undefined);
+
+    await act(async () => {
+      await result.current.removeItem('1');
     });
 
-    expect(result.current.shoppingList[0].isChecked).toBe(true);
-    expect(updateDatabase).toHaveBeenCalled();
-  });
-
-  it('should remove an item', () => {
-    const { result } = renderHook(() => useShoppingList());
-
-    act(() => {
-      result.current.removeItem('1');
-    });
-
-    expect(result.current.shoppingList).toHaveLength(0);
-    expect(updateDatabase).toHaveBeenCalled();
+    expect(ShoppingListService.deleteItem).toHaveBeenCalledWith('1');
   });
 });

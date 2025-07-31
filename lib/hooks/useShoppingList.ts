@@ -1,70 +1,119 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { ShoppingListItem } from '@/types/pantry';
+import { usePantryStore } from '@/lib/stores/pantry-store';
+import { ShoppingListService } from '@/lib/services/database';
 import { toast } from 'sonner';
-import { loadShoppingList, updateDatabase } from '@/lib/utils/file-db';
 
 export function useShoppingList() {
-  const [shoppingList, setShoppingList] = useState<ShoppingListItem[]>([]);
+  const {
+    shoppingItems,
+    shoppingLoading,
+    shoppingError,
+    setShoppingItems,
+    addShoppingItem: addToStore,
+    updateShoppingItem: updateInStore,
+    deleteShoppingItem: deleteFromStore,
+    toggleShoppingItem: toggleInStore,
+    setShoppingLoading,
+    setShoppingError,
+  } = usePantryStore();
 
+  // Load shopping list on mount
   useEffect(() => {
-    setShoppingList(loadShoppingList());
-  }, []);
-
-  const addItem = (newItem: Omit<ShoppingListItem, 'id' | 'isChecked'>) => {
-    const existingItem = shoppingList.find(
-      item => item.name.toLowerCase() === newItem.name.toLowerCase() && 
-             item.unit.toLowerCase() === newItem.unit.toLowerCase()
-    );
-
-    let updatedList;
-    if (existingItem) {
-      updatedList = shoppingList.map(item => 
-        item.id === existingItem.id 
-          ? { ...item, quantity: item.quantity + newItem.quantity }
-          : item
-      );
-    } else {
-      const item: ShoppingListItem = {
-        ...newItem,
-        id: Math.random().toString(36).substr(2, 9),
-        isChecked: false,
-      };
-      updatedList = [...shoppingList, item];
-    }
+    let isMounted = true;
     
-    setShoppingList(updatedList);
-    updateDatabase('shoppingList', updatedList);
-    toast.success('Item added to shopping list');
-  };
+    const loadItems = async () => {
+      if (!isMounted) return;
+      
+      setShoppingLoading(true);
+      setShoppingError(null);
+      
+      try {
+        const items = await ShoppingListService.getAllItems();
+        if (!isMounted) return;
+        
+        setShoppingItems(items);
+      } catch (error) {
+        if (!isMounted) return;
+        
+        const errorMessage = error instanceof Error ? error.message : 'Failed to load shopping list';
+        setShoppingError(errorMessage);
+        toast.error(errorMessage);
+      } finally {
+        if (isMounted) {
+          setShoppingLoading(false);
+        }
+      }
+    };
 
-  const toggleItem = (id: string) => {
-    const updatedList = shoppingList.map(item =>
-      item.id === id ? { ...item, isChecked: !item.isChecked } : item
-    );
-    setShoppingList(updatedList);
-    updateDatabase('shoppingList', updatedList);
-  };
+    loadItems();
 
-  const removeItem = (id: string) => {
-    const updatedList = shoppingList.filter(item => item.id !== id);
-    setShoppingList(updatedList);
-    updateDatabase('shoppingList', updatedList);
-    toast.success('Item removed from shopping list');
-  };
+    return () => {
+      isMounted = false;
+    };
+  }, []); // Empty dependency array since we only want to run on mount
 
-  const addMultipleItems = (items: Omit<ShoppingListItem, 'id' | 'isChecked'>[]) => {
-    for (const item of items) {
-      addItem(item);
+  const addItem = useCallback(async (newItem: Omit<ShoppingListItem, 'id' | 'isChecked'>) => {
+    setShoppingLoading(true);
+    setShoppingError(null);
+    
+    try {
+      const item = await ShoppingListService.createItem(newItem);
+      addToStore(item);
+      toast.success('Item added to shopping list');
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to add item to shopping list';
+      setShoppingError(errorMessage);
+      toast.error(errorMessage);
+      throw error;
+    } finally {
+      setShoppingLoading(false);
     }
-  };
+  }, [addToStore, setShoppingLoading, setShoppingError]);
+
+  const toggleItem = useCallback(async (id: string) => {
+    setShoppingLoading(true);
+    setShoppingError(null);
+    
+    try {
+      const item = await ShoppingListService.toggleItem(id);
+      updateInStore(item);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to toggle item';
+      setShoppingError(errorMessage);
+      toast.error(errorMessage);
+      throw error;
+    } finally {
+      setShoppingLoading(false);
+    }
+  }, [updateInStore, setShoppingLoading, setShoppingError]);
+
+  const removeItem = useCallback(async (id: string) => {
+    setShoppingLoading(true);
+    setShoppingError(null);
+    
+    try {
+      await ShoppingListService.deleteItem(id);
+      deleteFromStore(id);
+      toast.success('Item removed from shopping list');
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to remove item';
+      setShoppingError(errorMessage);
+      toast.error(errorMessage);
+      throw error;
+    } finally {
+      setShoppingLoading(false);
+    }
+  }, [deleteFromStore, setShoppingLoading, setShoppingError]);
 
   return {
-    shoppingList,
+    shoppingList: shoppingItems,
+    loading: shoppingLoading,
+    error: shoppingError,
     addItem,
     toggleItem,
     removeItem,
-    addMultipleItems,
   };
 }

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PantryPal Favicon Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .favicon-preview {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+        }
+        .favicon-preview svg {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .instructions {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .steps {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .steps ol {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .tools {
+            background: #f3e5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .tools ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .tools a {
+            color: #1976d2;
+            text-decoration: none;
+        }
+        .tools a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>🏠 PantryPal Favicon</h1>
+    
+    <div class="favicon-preview">
+        <h2>Current Favicon Design</h2>
+        <svg width="64" height="64" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- House outline -->
+            <path d="M16 4L4 14V26H12V20H20V26H28V14L16 4Z" fill="#f59e0b" stroke="#92400e" stroke-width="1"/>
+            
+            <!-- Door -->
+            <rect x="14" y="18" width="4" height="8" fill="#92400e"/>
+            
+            <!-- Window -->
+            <rect x="22" y="16" width="4" height="4" fill="#fef3c7" stroke="#92400e" stroke-width="0.5"/>
+            
+            <!-- Pantry symbol (shelf) -->
+            <rect x="6" y="16" width="6" height="1" fill="#92400e"/>
+            <rect x="6" y="18" width="6" height="1" fill="#92400e"/>
+            <rect x="6" y="20" width="6" height="1" fill="#92400e"/>
+            
+            <!-- Food items on shelf -->
+            <circle cx="7.5" cy="15" r="0.5" fill="#10b981"/>
+            <circle cx="9.5" cy="15" r="0.5" fill="#ef4444"/>
+            <circle cx="11.5" cy="15" r="0.5" fill="#3b82f6"/>
+        </svg>
+        <p><em>32x32 pixel design with house and pantry theme</em></p>
+    </div>
+
+    <div class="instructions">
+        <h2>📋 Favicon Design Details</h2>
+        <p><strong>Theme:</strong> House with integrated pantry/food storage</p>
+        <p><strong>Colors:</strong> Warm amber (#f59e0b) with brown accents (#92400e)</p>
+        <p><strong>Elements:</strong> House outline, door, window, pantry shelves, food items</p>
+        <p><strong>Size:</strong> 32x32 pixels (standard favicon size)</p>
+    </div>
+
+    <div class="steps">
+        <h2>🔄 Convert to ICO Format</h2>
+        <ol>
+            <li>Open the SVG file: <code>public/favicon.svg</code></li>
+            <li>Copy the SVG code or save the file</li>
+            <li>Use one of the online conversion tools below</li>
+            <li>Download the generated favicon.ico file</li>
+            <li>Replace the placeholder in <code>public/favicon.ico</code></li>
+        </ol>
+    </div>
+
+    <div class="tools">
+        <h2>🛠️ Online Conversion Tools</h2>
+        <ul>
+            <li><a href="https://favicon.io/favicon-converter/" target="_blank">favicon.io</a> - Upload SVG and convert to ICO</li>
+            <li><a href="https://realfavicongenerator.net/" target="_blank">RealFaviconGenerator</a> - Professional favicon generator</li>
+            <li><a href="https://convertio.co/svg-ico/" target="_blank">Convertio</a> - Simple SVG to ICO converter</li>
+            <li><a href="https://cloudconvert.com/svg-to-ico" target="_blank">CloudConvert</a> - Cloud-based conversion</li>
+        </ul>
+    </div>
+
+    <div class="instructions">
+        <h2>📝 Next Steps</h2>
+        <p>After converting to ICO format:</p>
+        <ol>
+            <li>Place the favicon.ico file in the <code>public/</code> directory</li>
+            <li>Update the README.md to reference favicon.ico instead of favicon.svg</li>
+            <li>The favicon will automatically appear in browser tabs</li>
+        </ol>
+    </div>
+
+    <footer style="text-align: center; margin-top: 40px; color: #666;">
+        <p>PantryPal - Your Smart Kitchen Assistant 🏠</p>
+    </footer>
+</body>
+</html> 

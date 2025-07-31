@@ -1,0 +1,95 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model PantryItem {
+  id             String   @id @default(cuid())
+  name           String
+  quantity       Float
+  unit           String
+  category       String
+  expirationDate DateTime
+  location       String?
+  price          Float?
+  notes          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Nutrition info
+  calories     Float?
+  protein      Float?
+  carbs        Float?
+  fat          Float?
+  servingSize  String?
+
+  // Relationships
+  recipeIngredients RecipeIngredient[]
+
+  @@map("pantry_items")
+}
+
+model Recipe {
+  id                 String   @id @default(cuid())
+  name               String
+  instructions       String   // JSON string of instructions array
+  servings           Int
+  prepTime           Int
+  cookTime           Int
+  dietaryType        String
+  dietaryRestrictions String? // JSON string of restrictions array
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  // Relationships
+  ingredients RecipeIngredient[]
+
+  @@map("recipes")
+}
+
+model RecipeIngredient {
+  id       String @id @default(cuid())
+  name     String
+  quantity Float
+  unit     String
+  optional Boolean @default(false)
+  
+  // Relationships
+  recipeId    String? @map("recipe_id")
+  recipe      Recipe? @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+  pantryItemId String? @map("pantry_item_id")
+  pantryItem   PantryItem? @relation(fields: [pantryItemId], references: [id], onDelete: SetNull)
+
+  @@map("recipe_ingredients")
+}
+
+model ShoppingListItem {
+  id         String   @id @default(cuid())
+  name       String
+  quantity   Float
+  unit       String
+  category   String
+  price      Float?
+  isChecked  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("shopping_list_items")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+} 

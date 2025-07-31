@@ -1,15 +1,603 @@
-PantryPal: Your Smart Kitchen Assistant
+# PantryPal: Your Smart Kitchen Assistant 🏠
 
-PantryPal is an intuitive web app designed to simplify kitchen management and meal planning. With its user-friendly interface, you can:
+A comprehensive pantry management application that helps you track ingredients, manage recipes, create shopping lists, and optimize your kitchen operations with intelligent cost calculations and expiration tracking.
 
-Track Pantry Items: Effortlessly manage your pantry inventory, complete with expiration dates to reduce waste and keep your ingredients fresh.
-Shopping List: Create and organize shopping lists to ensure you never forget essential groceries.
-Recipe Management: Add and save your favorite recipes, linking them with your pantry items for seamless meal preparation.
-Smart Search: Quickly search for items in your pantry, making it easy to plan meals with what you already have.
-PantryPal brings convenience and organization to your kitchen, helping you save time, reduce food waste, and enjoy stress-free cooking.
+![PantryPal Logo](public/favicon.svg)
 
-Technologies Used
-Frontend: Next.js, React, TypeScript, Tailwind CSS, Lucide-react
-Backend: Node.js, API routes
-Testing: Jest
-Deployment: Netlify
+## 🌟 What is PantryPal?
+
+PantryPal is a modern web application designed to revolutionize how you manage your kitchen. It combines the functionality of a digital pantry, recipe manager, and smart shopping assistant into one intuitive platform. Whether you're a home cook, meal planner, or someone who wants to reduce food waste, PantryPal helps you keep track of what you have, what you need, and how much it costs.
+
+## ✨ Key Features
+
+### 🥫 **Smart Pantry Management**
+- **Inventory Tracking**: Add, edit, and remove pantry items with quantities, units, and categories
+- **Expiration Monitoring**: Automatic tracking of expiration dates with visual warnings
+- **Price Management**: Track item costs and update prices easily
+- **Category Organization**: Organize items by categories (Dairy, Fresh Produce, Dry Goods, etc.)
+- **Location Tracking**: Store items in different locations (Pantry, Refrigerator, Freezer, etc.)
+
+### 🍳 **Intelligent Recipe Management**
+- **Recipe Creation**: Build recipes with step-by-step instructions and ingredient lists
+- **Smart Ingredient Autocomplete**: Auto-suggest ingredients from your pantry and common items
+- **Real-time Cost Calculation**: See recipe costs as you add ingredients with proportional pricing
+- **Inventory Integration**: Check if you have ingredients before cooking
+- **Cook Recipe Feature**: Automatically deduct ingredients when cooking
+- **Expiration Awareness**: Warn about expiring ingredients and allow proceeding if desired
+
+### 🛒 **Smart Shopping Lists**
+- **Intelligent Autocomplete**: Suggests items from your pantry and common shopping items
+- **Purchase Confirmation**: When marking items off, confirm quantity and price
+- **Automatic Pantry Addition**: Add purchased items directly to your pantry
+- **Price Tracking**: Update item prices when shopping
+- **Category Auto-fill**: Automatically categorize items based on suggestions
+
+### 💰 **Cost Management**
+- **Proportional Pricing**: Calculate costs based on actual quantities needed (not full unit prices)
+- **Unit Conversions**: Smart conversion between different units (cups, tablespoons, pounds, etc.)
+- **Per-serving Costs**: See cost breakdown per serving for recipes
+- **Estimated Costs**: Fallback pricing for items not in your pantry
+- **Budget Tracking**: Monitor total costs and available vs. missing ingredient costs
+
+### 🔍 **Advanced Features**
+- **Search & Filter**: Find items quickly with advanced filtering options
+- **Expiration Alerts**: Get notified about items expiring soon
+- **Dietary Preferences**: Mark recipes as vegetarian, vegan, or non-vegetarian
+- **Responsive Design**: Works seamlessly on desktop, tablet, and mobile devices
+- **Real-time Updates**: Instant updates across all components
+
+## 🛠️ Technologies Used
+
+### **Frontend Framework**
+- **Next.js 15.1.5**: React framework for production with App Router
+- **React 18**: Modern React with hooks and functional components
+- **TypeScript**: Type-safe development for better code quality
+
+### **UI Components & Styling**
+- **shadcn/ui**: Modern, accessible component library
+- **Tailwind CSS**: Utility-first CSS framework for rapid styling
+- **Lucide React**: Beautiful, customizable icons
+- **Sonner**: Elegant toast notifications
+
+### **State Management**
+- **Zustand**: Lightweight state management
+- **React Hooks**: useState, useEffect, useCallback, useMemo for local state
+
+### **Data Management**
+- **In-Memory Storage**: Temporary data storage with sample data
+- **Custom Hooks**: usePantryItems, useRecipes, useShoppingList for data operations
+- **TypeScript Interfaces**: Strong typing for all data structures
+
+### **Development Tools**
+- **ESLint**: Code linting and quality enforcement
+- **Prettier**: Code formatting
+- **Jest**: Unit testing framework
+- **TypeScript**: Static type checking
+
+### **Build & Deployment**
+- **Vite**: Fast build tool (via Next.js)
+- **PostCSS**: CSS processing
+- **Autoprefixer**: CSS vendor prefixing
+
+## 🎨 Favicon & Branding
+
+PantryPal includes a custom favicon designed to represent the application's core purpose - managing your kitchen pantry. The favicon features:
+
+- **🏠 House Design**: Represents the home kitchen environment
+- **🥫 Pantry Shelves**: Symbolizes food storage and organization
+- **🎨 Warm Colors**: Amber (#f59e0b) with brown accents for a welcoming feel
+- **📏 Optimized Size**: 32x32 pixels for crisp display in browser tabs
+
+### Favicon Files
+- `public/favicon.svg` - Vector format (recommended for modern browsers)
+- `public/favicon.ico` - Traditional format (for older browsers)
+- `public/favicon-converter.html` - Tool to convert between formats
+
+### Converting to ICO Format
+If you need the traditional ICO format:
+1. Open `public/favicon-converter.html` in your browser
+2. Follow the instructions to convert the SVG to ICO
+3. Replace the placeholder favicon.ico file
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 18+ 
+- npm or yarn package manager
+- (Optional) Database server (PostgreSQL, MySQL, or SQLite)
+
+### Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yourusername/pantrypal.git
+   cd pantrypal
+   ```
+
+2. **Install dependencies**
+   ```bash
+   npm install
+   # or
+   yarn install
+   ```
+
+3. **Set up environment variables**
+   ```bash
+   # Copy the example environment file
+   cp env.example .env.local
+   
+   # Edit .env.local with your configuration
+   # See Database Integration section below for details
+   ```
+
+4. **Start the development server**
+   ```bash
+   npm run dev
+   # or
+   yarn dev
+   ```
+
+5. **Open your browser**
+   Navigate to [http://localhost:3000](http://localhost:3000) to see PantryPal in action!
+
+## 🗄️ Database Integration
+
+PantryPal supports both demo data mode (default) and real database integration. The application automatically detects which mode to use based on your environment configuration.
+
+### Demo Data Mode (Default)
+
+By default, PantryPal runs in demo data mode, which uses in-memory storage with sample data. This is perfect for:
+- Development and testing
+- Quick demos
+- Users who don't need persistent storage
+
+**No additional setup required!** Just run `npm run dev` and start using the app.
+
+### Real Database Mode
+
+To use a real database for persistent storage:
+
+#### 1. **Choose Your Database**
+
+PantryPal supports multiple database types:
+
+**SQLite (Recommended for development)**
+```bash
+# No additional setup needed - SQLite is included
+DATABASE_URL="file:./dev.db"
+```
+
+**PostgreSQL**
+```bash
+# Install PostgreSQL and create a database
+DATABASE_URL="postgresql://username:password@localhost:5432/pantrypal"
+```
+
+**MySQL**
+```bash
+# Install MySQL and create a database
+DATABASE_URL="mysql://username:password@localhost:3306/pantrypal"
+```
+
+#### 2. **Configure Environment Variables**
+
+Create or update your `.env.local` file:
+
+```bash
+# Set to 'true' to use real database instead of demo data
+USE_REAL_DB=true
+
+# Database connection string
+DATABASE_URL="file:./dev.db"  # SQLite
+# DATABASE_URL="postgresql://username:password@localhost:5432/pantrypal"  # PostgreSQL
+# DATABASE_URL="mysql://username:password@localhost:3306/pantrypal"  # MySQL
+
+# Next.js Configuration
+NEXTAUTH_SECRET=your-secret-key-here
+NEXTAUTH_URL=http://localhost:3000
+```
+
+#### 3. **Set Up the Database**
+
+```bash
+# Generate Prisma client
+npm run db:generate
+
+# Push the schema to your database
+npm run db:push
+
+# (Optional) Open Prisma Studio to view/edit data
+npm run db:studio
+```
+
+#### 4. **Verify Database Connection**
+
+The application will automatically detect your database mode:
+- **Demo mode**: Console shows "🔧 Using demo data mode"
+- **Real database mode**: Console shows "🗄️ Using real database mode"
+
+### Database Schema
+
+PantryPal uses the following database schema:
+
+```sql
+-- Pantry Items
+CREATE TABLE pantry_items (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  quantity REAL NOT NULL,
+  unit TEXT NOT NULL,
+  category TEXT NOT NULL,
+  expiration_date DATETIME NOT NULL,
+  location TEXT,
+  price REAL,
+  notes TEXT,
+  calories REAL,
+  protein REAL,
+  carbs REAL,
+  fat REAL,
+  serving_size TEXT,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Recipes
+CREATE TABLE recipes (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  instructions TEXT NOT NULL,
+  servings INTEGER NOT NULL,
+  prep_time INTEGER NOT NULL,
+  cook_time INTEGER NOT NULL,
+  dietary_type TEXT NOT NULL,
+  dietary_restrictions TEXT,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Recipe Ingredients
+CREATE TABLE recipe_ingredients (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  quantity REAL NOT NULL,
+  unit TEXT NOT NULL,
+  optional BOOLEAN DEFAULT FALSE,
+  recipe_id TEXT,
+  pantry_item_id TEXT,
+  FOREIGN KEY (recipe_id) REFERENCES recipes(id) ON DELETE CASCADE,
+  FOREIGN KEY (pantry_item_id) REFERENCES pantry_items(id) ON DELETE SET NULL
+);
+
+-- Shopping List Items
+CREATE TABLE shopping_list_items (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  quantity REAL NOT NULL,
+  unit TEXT NOT NULL,
+  category TEXT NOT NULL,
+  price REAL,
+  is_checked BOOLEAN DEFAULT FALSE,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Users (for future authentication)
+CREATE TABLE users (
+  id TEXT PRIMARY KEY,
+  email TEXT UNIQUE NOT NULL,
+  name TEXT,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+### Migration from Demo to Real Database
+
+If you've been using demo data and want to migrate to a real database:
+
+1. **Set up your database** (follow steps above)
+2. **Export demo data** (if needed):
+   ```bash
+   # The demo data is already in the database service
+   # You can copy it manually or use Prisma Studio
+   npm run db:studio
+   ```
+3. **Switch to real database mode**:
+   ```bash
+   # Update .env.local
+   USE_REAL_DB=true
+   DATABASE_URL="your-database-url"
+   ```
+4. **Restart the application**:
+   ```bash
+   npm run dev
+   ```
+
+### Database Management Commands
+
+```bash
+# Generate Prisma client (required after schema changes)
+npm run db:generate
+
+# Push schema changes to database
+npm run db:push
+
+# Open Prisma Studio (database GUI)
+npm run db:studio
+
+# Reset database (development only)
+npm run db:reset
+
+# Create a new migration
+npx prisma migrate dev --name your-migration-name
+```
+
+### Troubleshooting Database Issues
+
+**Common Issues:**
+
+1. **"Prisma client not available"**
+   ```bash
+   npm run db:generate
+   ```
+
+2. **"Database connection failed"**
+   - Check your `DATABASE_URL` in `.env.local`
+   - Ensure your database server is running
+   - Verify credentials and permissions
+
+3. **"Schema out of sync"**
+   ```bash
+   npm run db:push
+   ```
+
+4. **"Demo data not loading"**
+   - Check that `USE_REAL_DB` is not set to `true`
+   - Clear browser cache and restart the app
+
+**Getting Help:**
+- Check the console for error messages
+- Verify your environment variables
+- Ensure all dependencies are installed
+- Try running in demo mode first to isolate issues
+
+### Available Scripts
+
+```bash
+# Development
+npm run dev          # Start development server
+npm run build        # Build for production
+npm run start        # Start production server
+
+# Code Quality
+npm run lint         # Run ESLint
+npm run lint:fix     # Fix ESLint issues
+npm run type-check   # Run TypeScript type checking
+
+# Testing
+npm run test         # Run Jest tests
+npm run test:watch   # Run tests in watch mode
+npm run test:coverage # Run tests with coverage
+
+## 🧪 Testing
+
+PantryPal includes comprehensive test coverage using Jest and React Testing Library.
+
+### Test Structure
+
+```
+_tests_/
+├── components/           # Component tests
+│   └── pantry/
+│       └── item-card.test.tsx
+├── lib/
+│   ├── hooks/           # Hook tests
+│   │   ├── usePantryItems.test.tsx
+│   │   ├── useRecipes.test.tsx
+│   │   └── useShoppingLists.test.tsx
+│   └── services/        # Service tests
+│       └── api.test.ts
+```
+
+### Running Tests
+
+```bash
+# Run all tests
+npm run test
+
+# Run tests in watch mode (development)
+npm run test:watch
+
+# Run tests with coverage report
+npm run test:coverage
+
+# Run specific test file
+npm test -- item-card.test.tsx
+
+# Run tests matching a pattern
+npm test -- --testNamePattern="ItemCard"
+```
+
+### Test Coverage
+
+The test suite covers:
+
+- **Components**: Rendering, user interactions, props handling
+- **Hooks**: State management, side effects, error handling
+- **Services**: API calls, database operations, error scenarios
+- **Utilities**: Helper functions, data transformations
+
+### Writing Tests
+
+**Component Test Example:**
+```typescript
+import { render, screen, fireEvent } from '@testing-library/react';
+import { ItemCard } from '@/components/pantry/item-card';
+
+describe('ItemCard', () => {
+  it('renders item information correctly', () => {
+    render(<ItemCard item={mockItem} onEdit={jest.fn()} onDelete={jest.fn()} />);
+    expect(screen.getByText('Test Item')).toBeInTheDocument();
+  });
+});
+```
+
+**Hook Test Example:**
+```typescript
+import { renderHook, act } from '@testing-library/react';
+import { usePantryItems } from '@/lib/hooks/usePantryItems';
+
+describe('usePantryItems', () => {
+  it('should load initial items', async () => {
+    const { result } = renderHook(() => usePantryItems());
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 0));
+    });
+    expect(result.current.items).toBeDefined();
+  });
+});
+```
+
+### Mocking
+
+Tests use comprehensive mocking for:
+- Database services
+- API calls
+- Toast notifications
+- React hooks and stores
+
+### Continuous Integration
+
+Tests run automatically on:
+- Pull requests
+- Main branch pushes
+- Release builds
+
+# Database (if using Prisma)
+npm run db:generate  # Generate Prisma client
+npm run db:push      # Push schema to database
+npm run db:studio    # Open Prisma Studio
+```
+
+## 📁 Project Structure
+
+```
+PantryPal/
+├── app/                          # Next.js App Router
+│   ├── globals.css              # Global styles
+│   ├── layout.tsx               # Root layout component
+│   ├── page.tsx                 # Main application page
+│   └── providers.tsx            # Context providers
+│
+├── components/                   # React components
+│   ├── layout/                  # Layout components
+│   │   └── header.tsx          # Application header
+│   ├── pantry/                  # Pantry-related components
+│   │   ├── item-card.tsx       # Individual pantry item display
+│   │   ├── item-form.tsx       # Add/edit pantry item form
+│   │   ├── pantry-tab.tsx      # Main pantry tab component
+│   │   ├── recipe-card.tsx     # Individual recipe display
+│   │   ├── recipe-form.tsx     # Add recipe form with autocomplete
+│   │   ├── recipe-edit-form.tsx # Edit recipe form
+│   │   ├── recipes-tab.tsx     # Recipes tab component
+│   │   ├── shopping-list.tsx   # Shopping list component
+│   │   ├── shopping-list-form.tsx # Add shopping item form
+│   │   └── ...                 # Other pantry components
+│   └── ui/                      # Reusable UI components (shadcn/ui)
+│       ├── button.tsx          # Button component
+│       ├── dialog.tsx          # Dialog/modal component
+│       ├── input.tsx           # Input field component
+│       └── ...                 # Other UI components
+│
+├── lib/                         # Utility libraries
+│   ├── config/                  # Configuration files
+│   │   └── database.ts         # Database configuration
+│   ├── hooks/                   # Custom React hooks
+│   │   ├── usePantryItems.ts   # Pantry items management
+│   │   ├── useRecipes.ts       # Recipes management
+│   │   └── useShoppingList.ts  # Shopping list management
+│   ├── services/               # Service layer
+│   │   ├── database.ts         # Database service (demo + real DB)
+│   │   └── api.ts              # API service functions
+│   ├── utils/                  # Utility functions
+│   │   └── recipe-utils.ts     # Recipe-specific utilities
+│   └── utils.ts                # General utilities
+│
+├── types/                       # TypeScript type definitions
+│   ├── pantry.ts               # Pantry-related types
+│   └── recipe.ts               # Recipe-related types
+│
+├── _tests_/                     # Test files
+│   └── lib/                    # Library tests
+│       └── hooks/              # Hook tests
+│
+├── public/                      # Static assets
+│   ├── favicon.svg             # Application favicon (SVG format)
+│   ├── favicon.ico             # Application favicon (ICO format - placeholder)
+│   └── favicon-converter.html  # Tool to convert SVG to ICO
+│
+├── prisma/                      # Database schema (if using Prisma)
+│   └── schema.prisma           # Database schema definition
+│
+├── package.json                 # Dependencies and scripts
+├── tailwind.config.ts          # Tailwind CSS configuration
+├── tsconfig.json               # TypeScript configuration
+├── jest.config.js              # Jest testing configuration
+└── README.md                   # This file
+```
+
+## 🎯 Core Features Explained
+
+### **Smart Autocomplete System**
+The autocomplete system combines data from your pantry and a curated list of common items:
+- **Pantry Integration**: Shows items you already have with current quantities
+- **Common Items**: Suggests frequently used items with proper units and categories
+- **Smart Filtering**: Excludes expired items from suggestions
+- **Auto-fill**: Click any suggestion to populate name, unit, and category
+
+### **Intelligent Cost Calculation**
+PantryPal uses sophisticated unit conversion and proportional pricing:
+- **Unit Conversions**: Handles weight (grams, pounds, ounces) and volume (cups, tablespoons, etc.)
+- **Proportional Pricing**: Calculates costs based on actual quantities needed
+- **Fallback Estimates**: Uses market prices for items not in your pantry
+- **Real-time Updates**: Costs update instantly as you modify ingredients
+
+### **Expiration Management**
+Comprehensive expiration tracking to reduce food waste:
+- **Visual Warnings**: Color-coded expiration status
+- **Smart Filtering**: Excludes expired items from available inventory
+- **Flexible Cooking**: Option to proceed with expiring items if desired
+- **Time-based Alerts**: Warns about items expiring within 3 days
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
+
+### Development Workflow
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgments
+
+- **shadcn/ui** for the beautiful component library
+- **Lucide** for the amazing icons
+- **Tailwind CSS** for the utility-first styling approach
+- **Next.js** team for the excellent React framework
+
+## 📞 Support
+
+If you have any questions or need help, please:
+- Open an issue on GitHub
+- Check our [FAQ](FAQ.md)
+- Join our [Discord community](https://discord.gg/pantrypal)
+
+---
+
+**Made with ❤️ for better kitchen management**

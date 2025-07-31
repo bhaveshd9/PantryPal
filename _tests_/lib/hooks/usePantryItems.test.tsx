@@ -1,18 +1,38 @@
 import { renderHook, act } from '@testing-library/react';
 import { usePantryItems } from '@/lib/hooks/usePantryItems';
-import { loadPantryItems, updateDatabase } from '@/lib/utils/file-db';
+import { PantryService } from '@/lib/services/database';
 
-// Mock the file-db module
-jest.mock('@/lib/utils/file-db', () => ({
-  loadPantryItems: jest.fn(),
-  updateDatabase: jest.fn(),
+// Mock the database service
+jest.mock('@/lib/services/database', () => ({
+  PantryService: {
+    getAllItems: jest.fn(),
+    createItem: jest.fn(),
+    updateItem: jest.fn(),
+    deleteItem: jest.fn(),
+  },
 }));
 
 // Mock the sonner toast
 jest.mock('sonner', () => ({
   toast: {
     success: jest.fn(),
+    error: jest.fn(),
   },
+}));
+
+// Mock the pantry store
+jest.mock('@/lib/stores/pantry-store', () => ({
+  usePantryStore: () => ({
+    pantryItems: [],
+    pantryLoading: false,
+    pantryError: null,
+    setPantryItems: jest.fn(),
+    addPantryItem: jest.fn(),
+    updatePantryItem: jest.fn(),
+    deletePantryItem: jest.fn(),
+    setPantryLoading: jest.fn(),
+    setPantryError: jest.fn(),
+  }),
 }));
 
 describe('usePantryItems', () => {
@@ -31,18 +51,22 @@ describe('usePantryItems', () => {
   beforeEach(() => {
     // Reset all mocks before each test
     jest.clearAllMocks();
-    (loadPantryItems as jest.Mock).mockReturnValue(mockItems);
+    (PantryService.getAllItems as jest.Mock).mockResolvedValue(mockItems);
   });
 
-  it('should load initial items', () => {
+  it('should load initial items', async () => {
     const { result } = renderHook(() => usePantryItems());
-    expect(result.current.items).toEqual(mockItems);
-    expect(loadPantryItems).toHaveBeenCalled();
+    
+    // Wait for the async effect to complete
+    await act(async () => {
+      await new Promise(resolve => setTimeout(resolve, 0));
+    });
+    
+    expect(PantryService.getAllItems).toHaveBeenCalled();
   });
 
-  it('should add a new item', () => {
+  it('should add a new item', async () => {
     const { result } = renderHook(() => usePantryItems());
-
     const newItem = {
       name: 'New Item',
       quantity: 1,
@@ -52,39 +76,40 @@ describe('usePantryItems', () => {
       location: 'Test Location',
     };
 
-    act(() => {
-      result.current.addItem(newItem);
+    (PantryService.createItem as jest.Mock).mockResolvedValue({ ...newItem, id: '2' });
+
+    await act(async () => {
+      await result.current.addItem(newItem);
     });
 
-    expect(result.current.items).toHaveLength(2);
-    expect(result.current.items[1]).toMatchObject(newItem);
-    expect(updateDatabase).toHaveBeenCalled();
+    expect(PantryService.createItem).toHaveBeenCalledWith(newItem);
   });
 
-  it('should edit an existing item', () => {
+  it('should edit an existing item', async () => {
     const { result } = renderHook(() => usePantryItems());
-
     const editedItem = {
       ...mockItems[0],
       name: 'Edited Item',
     };
 
-    act(() => {
-      result.current.editItem(editedItem);
+    (PantryService.updateItem as jest.Mock).mockResolvedValue(editedItem);
+
+    await act(async () => {
+      await result.current.editItem(editedItem);
     });
 
-    expect(result.current.items[0].name).toBe('Edited Item');
-    expect(updateDatabase).toHaveBeenCalled();
+    expect(PantryService.updateItem).toHaveBeenCalledWith('1', expect.objectContaining({ name: 'Edited Item' }));
   });
 
-  it('should delete an item', () => {
+  it('should delete an item', async () => {
     const { result } = renderHook(() => usePantryItems());
 
-    act(() => {
-      result.current.deleteItem('1');
+    (PantryService.deleteItem as jest.Mock).mockResolvedValue(undefined);
+
+    await act(async () => {
+      await result.current.deleteItem('1');
     });
 
-    expect(result.current.items).toHaveLength(0);
-    expect(updateDatabase).toHaveBeenCalled();
+    expect(PantryService.deleteItem).toHaveBeenCalledWith('1');
   });
 });
