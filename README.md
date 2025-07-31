@@ -343,17 +343,22 @@ npx prisma migrate dev --name your-migration-name
    npm run db:generate
    ```
 
-2. **"Database connection failed"**
+2. **"PrismaClient is unable to run in this browser environment"**
+   - This is expected in static export builds
+   - The app automatically uses demo data in browser environments
+   - No action needed - this is working as designed
+
+3. **"Database connection failed"**
    - Check your `DATABASE_URL` in `.env.local`
    - Ensure your database server is running
    - Verify credentials and permissions
 
-3. **"Schema out of sync"**
+4. **"Schema out of sync"**
    ```bash
    npm run db:push
    ```
 
-4. **"Demo data not loading"**
+5. **"Demo data not loading"**
    - Check that `USE_REAL_DB` is not set to `true`
    - Clear browser cache and restart the app
 

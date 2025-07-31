@@ -1,7 +1,10 @@
 import { PantryItem, Recipe, ShoppingListItem } from '@/types/pantry';
 
 // Configuration for database mode
-const USE_DEMO_DATA = process.env.NODE_ENV === 'development' && !process.env.USE_REAL_DB;
+// In browser environments or static export, always use demo data
+const isBrowser = typeof window !== 'undefined';
+const isStaticExport = process.env.NODE_ENV === 'production' && typeof window !== 'undefined';
+const USE_DEMO_DATA = isBrowser || isStaticExport || (process.env.NODE_ENV === 'development' && !process.env.USE_REAL_DB);
 
 // In-memory demo data storage
 let pantryItems: PantryItem[] = [
@@ -199,6 +202,11 @@ class PrismaPantryService implements IDatabaseService {
   private prisma: any;
 
   constructor() {
+    // Prevent instantiation in browser environments
+    if (typeof window !== 'undefined') {
+      throw new DatabaseError('PrismaPantryService cannot be used in browser environments');
+    }
+    
     // Dynamically import Prisma to avoid issues in demo mode
     try {
       this.prisma = require('@prisma/client').PrismaClient;
@@ -367,6 +375,12 @@ class PrismaPantryService implements IDatabaseService {
 
 // Factory function to get the appropriate service
 function createPantryService(): IDatabaseService {
+  // Always use demo data in browser environments
+  if (isBrowser || isStaticExport) {
+    console.log('🔧 Using demo data mode (browser environment)');
+    return new DemoPantryService();
+  }
+  
   if (USE_DEMO_DATA) {
     console.log('🔧 Using demo data mode');
     return new DemoPantryService();
