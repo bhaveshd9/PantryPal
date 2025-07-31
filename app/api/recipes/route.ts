@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { RecipeService } from '@/lib/services/database';
 import { z } from 'zod';
 
+// Static export configuration
+export const dynamic = 'force-static';
+export const revalidate = false;
+
 // Validation schemas
 const recipeIngredientSchema = z.object({
   itemId: z.string().optional(),

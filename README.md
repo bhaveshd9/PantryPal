@@ -65,8 +65,10 @@ PantryPal is a modern web application designed to revolutionize how you manage y
 
 ### **Data Management**
 - **In-Memory Storage**: Temporary data storage with sample data
+- **API Routes**: Next.js API routes for future database integration
 - **Custom Hooks**: usePantryItems, useRecipes, useShoppingList for data operations
 - **TypeScript Interfaces**: Strong typing for all data structures
+- **Database Ready**: Prisma schema and service layer for easy database integration
 
 ### **Development Tools**
 - **ESLint**: Code linting and quality enforcement
@@ -479,11 +481,137 @@ npm run db:push      # Push schema to database
 npm run db:studio    # Open Prisma Studio
 ```
 
-## 📁 Project Structure
+## 🚀 Deployment
+
+PantryPal is configured for **static export deployment** with mock data, making it perfect for portfolio showcases and demo deployments. The application also preserves API routes for future server deployment when you're ready to integrate a real database.
+
+### Current Configuration: Static Export
+
+The project is configured for static export with the following setup:
+
+```javascript
+// next.config.js
+output: 'export'  // Creates static files
+trailingSlash: true
+skipTrailingSlashRedirect: true
+```
+
+```typescript
+// All API routes configured for static export:
+export const dynamic = 'force-static';
+export const revalidate = false;
+```
+
+### ✅ What This Achieves
+
+- **Static export** for free hosting and portfolio deployment
+- **API routes preserved** for future server deployment
+- **Mock data** works perfectly for demo purposes
+- **Zero configuration** needed for deployment
+- **Zero server costs** for hosting
+
+### 🎯 Deployment Options
+
+#### Option 1: Static Export (Current - Recommended for Demo)
+
+**Perfect for:** Portfolio, demo, free hosting
+
+**Deploy to:**
+- **Vercel** (recommended) - Automatic deployment from GitHub
+- **Netlify** - Connect repository and deploy
+- **GitHub Pages** - Free static hosting
+- **Any static hosting platform**
+
+**Steps:**
+1. Push your code to GitHub
+2. Connect to your preferred hosting platform
+3. Deploy automatically - no additional configuration needed
+
+#### Option 2: Server Deployment (Future - For Real Database)
+
+**Perfect for:** Production with real database
+
+**Deploy to:**
+- **Vercel** (server mode)
+- **Railway**
+- **Heroku**
+- **Self-hosted**
+
+**Migration Steps:**
+1. Remove static export configuration from `next.config.js`
+2. Remove static config from API routes
+3. Set up database and environment variables
+4. Deploy to server platform
+
+### 📁 Build Output
+
+After `npm run build`, you'll get:
+```
+out/
+├── index.html
+├── _next/
+├── api/
+└── ... (all static files)
+```
+
+### 🔄 Migration Path
+
+When you're ready to use a real database:
+
+1. **Remove static export:**
+   ```javascript
+   // next.config.js - Remove these lines:
+   output: 'export'
+   trailingSlash: true
+   skipTrailingSlashRedirect: true
+   ```
+
+2. **Remove static config from API routes:**
+   ```typescript
+   // Remove from all API routes:
+   // export const dynamic = 'force-static';
+   // export const revalidate = false;
+   ```
+
+3. **Set up database:**
+   ```bash
+   npm run db:generate
+   npm run db:push
+   ```
+
+4. **Configure environment:**
+   ```bash
+   USE_REAL_DB=true
+   DATABASE_URL="your-database-url"
+   ```
+
+5. **Deploy to server platform**
+
+### 🎉 Current Status: Ready for Demo Deployment!
+
+✅ **Build successful**  
+✅ **API routes preserved**  
+✅ **Mock data working**  
+✅ **Ready for any static hosting**  
+✅ **Zero server costs**  
+✅ **Perfect for portfolio**  
+
+Your app is **production-ready for demo deployment** with the flexibility to easily switch to server deployment when needed!
+
+For detailed deployment instructions, see [DEPLOYMENT.md](DEPLOYMENT.md).
+
+## �� Project Structure
 
 ```
 PantryPal/
 ├── app/                          # Next.js App Router
+│   ├── api/                     # API routes
+│   │   ├── pantry/              # Pantry items API
+│   │   │   └── route.ts         # CRUD operations for pantry items
+│   │   ├── recipes/             # Recipes API
+│   │   │   └── route.ts         # CRUD operations for recipes
+│   │   └── shopping-list/       # Shopping list API
+│   │       └── route.ts         # CRUD operations for shopping list
 │   ├── globals.css              # Global styles
 │   ├── layout.tsx               # Root layout component
 │   ├── page.tsx                 # Main application page

@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ShoppingListService } from '@/lib/services/database';
 import { z } from 'zod';
 
+// Static export configuration
+export const dynamic = 'force-static';
+export const revalidate = false;
+
 // Validation schemas
 const createShoppingItemSchema = z.object({
   name: z.string().min(1, 'Name is required'),
